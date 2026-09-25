@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="한전 고지서의 실제 전기요금을 1층과 집주인의 사용량 비율대로 나눠요. 입력한 숫자는 외부로 보내지 않아요.">
+  <meta name="theme-color" content="#154a9a">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+  <title>1층 전기요금 나누기</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23154a9a'/%3E%3Cpath d='M36 8 17 35h14l-3 21 20-29H34z' fill='white'/%3E%3C/svg%3E">
+  <style>
+    :root { color-scheme: light; --ink: #172c49; --muted: #4c607a; --blue: #154a9a; --line: #c7d3e2; --paper: #fff; --bg: #f0f4f9; --error: #a51c25; }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-size: 20px; line-height: 1.6; word-break: keep-all; overflow-wrap: anywhere; }
+    button, input { font: inherit; }
+    button { cursor: pointer; touch-action: manipulation; }
+    button, input, [tabindex] { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 4px solid #c76300; outline-offset: 4px; }
+    .shell { width: min(1080px, 100%); margin: 0 auto; padding: 32px 24px 40px; }
+    header { margin-bottom: 24px; }
+    .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .mark { flex: 0 0 auto; display: grid; place-items: center; width: 44px; height: 44px; background: var(--blue); color: white; border-radius: 12px; }
+    h1 { margin: 0; font-size: clamp(28px, 4.8vw, 38px); line-height: 1.35; letter-spacing: -1px; }
+    header p { margin: 0; color: var(--muted); }
+    .period { padding: 18px 22px; background: #fff4d9; border: 2px solid #c48413; border-radius: 14px; margin-bottom: 24px; color: #603b00; }
+    .period strong { display: block; font-size: 22px; }
+    .period p { margin: 4px 0 0; }
+    .layout { display: grid; grid-template-columns: 1.12fr 1fr; gap: 24px; align-items: start; }
+    .panel { background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: 28px; }
+    h2 { font-size: 25px; line-height: 1.4; margin: 0 0 24px; letter-spacing: -.5px; }
+    .field { margin-bottom: 26px; }
+    label { display: flex; align-items: flex-start; gap: 10px; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .number { background: #e8effa; color: var(--blue); border-radius: 50%; min-width: 30px; height: 30px; text-align: center; font-size: 18px; line-height: 30px; margin-top: 3px; }
+    .hint { margin: 0 0 10px; color: var(--muted); font-size: 18px; }
+    .bill-hint { color: #774400; background: #fff7e5; border-left: 4px solid #c48413; padding: 9px 12px; }
+    .input-wrap { position: relative; }
+    input { display: block; width: 100%; min-height: 68px; padding: 12px 75px 12px 16px; border: 2px solid #93a7c0; border-radius: 10px; font-size: 28px; line-height: 1.35; background: white; color: var(--ink); font-variant-numeric: tabular-nums; }
+    input::placeholder { color: #62748b; opacity: 1; font-size: 23px; }
+    input:focus { border-color: var(--blue); }
+    input[aria-invalid="true"] { border-color: var(--error); background: #fff8f8; }
+    .unit { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    .field-error { color: var(--error); font-weight: 700; font-size: 19px; margin: 9px 0 0; }
+    .error-summary { background: #fff0f0; color: #86161e; border: 2px solid #bb3f46; padding: 14px 16px; border-radius: 10px; margin-bottom: 20px; }
+    .error-summary p { margin: 4px 0 0; }
+    .actions { display: grid; gap: 12px; }
+    .button { border: 2px solid var(--blue); border-radius: 12px; min-height: 64px; width: 100%; padding: 14px 18px; font-size: 23px; line-height: 1.4; font-weight: 700; }
+    .primary { color: white; background: var(--blue); }
+    .primary:hover { background: #103a7b; border-color: #103a7b; }
+    .secondary { color: var(--blue); background: white; }
+    .secondary:hover { background: #edf3fc; }
+    .result-panel { border-top: 6px solid var(--blue); }
+    .empty { padding: 16px 0 26px; color: var(--muted); }
+    .empty-icon { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: #eaf0fa; color: var(--blue); margin-bottom: 20px; }
+    .empty strong { color: var(--ink); font-size: 23px; display: block; margin-bottom: 8px; }
+    .empty p { margin: 0; }
+    .result-topline { margin: -12px 0 20px; color: var(--muted); }
+    .share { border-radius: 14px; padding: 20px; margin: 0 0 16px; border: 1px solid #bdcee7; background: #f1f6ff; }
+    .share.owner { background: #f7f8fa; border-color: #d2dae5; }
+    h3 { margin: 0; font-size: 22px; }
+    .amount { color: var(--blue); display: block; margin: 6px 0 12px; font-size: clamp(32px, 4.5vw, 42px); font-weight: 800; line-height: 1.35; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+    .owner .amount { color: var(--ink); }
+    dl { margin: 0; }
+    .stat { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; }
+    dt { color: var(--muted); }
+    dd { margin: 0; font-weight: 700; }
+    .total { padding: 16px 0 20px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+    .total strong { display: block; }
+    .total p { margin: 4px 0 0; font-size: 19px; color: var(--muted); }
+    .formula { margin: 24px 0 0; padding-top: 22px; border-top: 1px solid var(--line); }
+    .formula h3 { margin-bottom: 14px; }
+    .formula-item { margin: 0 0 16px; font-size: 19px; }
+    .formula-item strong, .formula-item span { display: block; }
+    .formula-item span { color: var(--muted); }
+    .small-note { font-size: 18px; color: var(--muted); margin: 14px 0 0; }
+    .status { font-size: 19px; font-weight: 700; color: #174f38; margin: 12px 0 0; }
+    .status:empty { display: none; }
+    .manual-copy { margin-top: 16px; }
+    .manual-copy p { margin: 0 0 10px; }
+    .manual-copy pre { white-space: pre-wrap; font: inherit; font-size: 18px; background: #f0f4f9; border: 2px solid #93a7c0; border-radius: 10px; padding: 16px; user-select: text; -webkit-user-select: text; word-break: break-word; }
+    footer { font-size: 18px; color: var(--muted); margin-top: 24px; }
+    footer p { margin: 5px 0; }
+    noscript p { padding: 20px; color: var(--error); background: #fff0f0; }
+    @media (max-width: 760px) {
+      .shell { padding: 22px 16px 32px; }
+      .layout { grid-template-columns: 1fr; gap: 20px; }
+      .panel { padding: 22px 20px; border-radius: 16px; }
+      .period { padding: 16px; margin-bottom: 20px; }
+      .result-panel { scroll-margin-top: 18px; }
+      .empty { padding: 0 0 8px; }
+      .empty-icon { display: none; }
+      .share { padding: 18px; }
+      h2 { margin-bottom: 22px; }
+    }
+    @media (max-width: 360px) {
+      .shell { padding-left: 12px; padding-right: 12px; }
+      .panel { padding: 20px 16px; }
+      .brand { gap: 8px; }
+      .mark { width: 34px; height: 38px; }
+      h1 { font-size: 27px; }
+      .amount { font-size: 32px; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+    @media print { body { background: white; } header, .period, form, footer, #copy-button, .status, .manual-copy { display: none !important; } .layout { display: block; } .panel { border: none; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="brand"><span class="mark" aria-hidden="true"><svg width="27" height="30" viewBox="0 0 24 28" fill="currentColor"><path d="M14 1 3 16h8l-2 11 12-16h-8z"/></svg></span><h1>1층 전기요금 나누기</h1></div>
+      <p>실제로 나온 요금을 쓴 만큼 나눠요.</p>
+    </header>
+
+    <aside class="period" aria-label="입력 전 꼭 확인하세요">
+      <strong>꼭! 같은 검침기간을 맞춰 주세요.</strong>
+      <p>한전 고지서의 사용기간과 1층의 지난번~이번 검침기간이 같아야 해요.</p>
+    </aside>
+
+    <noscript><p>계산하려면 브라우저의 자바스크립트를 켜 주세요.</p></noscript>
+
+    <div class="layout">
+      <form id="bill-form" class="panel" novalidate autocomplete="off">
+        <h2>숫자 4개를 입력해 주세요</h2>
+        <div class="field">
+          <label for="total"><span class="number" aria-hidden="true">1</span>집 전체 사용량</label>
+          <p class="hint" id="total-hint">한전 고지서에 적힌 사용량이에요. (kWh)</p>
+          <div class="input-wrap"><input id="total" type="text" inputmode="decimal" placeholder="예: 600" maxlength="24" required spellcheck="false" aria-describedby="total-hint total-error"><span class="unit" aria-hidden="true">kWh</span></div>
+          <p class="field-error" id="total-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="previous"><span class="number" aria-hidden="true">2</span>1층 지난번 검침값</label>
+          <p class="hint" id="previous-hint">지난번 보조계량기에 적힌 숫자예요. (kWh)</p>
+          <div class="input-wrap"><input id="previous" type="text" inputmode="decimal" placeholder="예: 1000" maxlength="24" required spellcheck="false" aria-describedby="previous-hint previous-error"><span class="unit" aria-hidden="true">kWh</span></div>
+          <p class="field-error" id="previous-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="current"><span class="number" aria-hidden="true">3</span>1층 이번 검침값</label>
+          <p class="hint" id="current-hint">이번 보조계량기에 적힌 숫자예요. (kWh)</p>
+          <div class="input-wrap"><input id="current" type="text" inputmode="decimal" placeholder="예: 1450" maxlength="24" required spellcheck="false" aria-describedby="current-hint current-error"><span class="unit" aria-hidden="true">kWh</span></div>
+          <p class="field-error" id="current-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="bill"><span class="number" aria-hidden="true">4</span>실제 전기요금</label>
+          <p class="hint bill-hint" id="bill-hint">한전 고지서에서 <strong>TV 수신료와 연체료 등은 빼고</strong>, 전기요금만 입력해 주세요. (원)</p>
+          <div class="input-wrap"><input id="bill" type="text" inputmode="numeric" placeholder="예: 120000" maxlength="24" required spellcheck="false" aria-describedby="bill-hint bill-error"><span class="unit" aria-hidden="true">원</span></div>
+          <p class="field-error" id="bill-error" hidden></p>
+        </div>
+        <div id="error-summary" class="error-summary" role="alert" hidden><strong>숫자를 다시 확인해 주세요.</strong><p id="error-text"></p></div>
+        <div class="actions">
+          <button class="button primary" type="submit">계산하기</button>
+          <button class="button secondary" type="reset">다시 입력</button>
+        </div>
+      </form>
+
+      <section class="panel result-panel" id="result-panel" aria-labelledby="result-title">
+        <h2 id="result-title" tabindex="-1">정산 결과</h2>
+        <div id="empty-result" class="empty">
+          <span class="empty-icon" aria-hidden="true"><svg width="30" height="32" viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="1" width="18" height="24" rx="3"/><path d="M7 6h10M7 12h3m4 0h3M7 17h3m4 0h3M7 21h3m4 0h3"/></svg></span>
+          <strong id="empty-title">얼마씩 내면 될까요?</strong>
+          <p id="empty-description">숫자 4개를 넣고 ‘계산하기’를 누르면 각자 낼 금액이 나와요.</p>
+        </div>
+        <div id="result-content" hidden>
+          <p class="result-topline">이번 전기요금은 이렇게 나눠요.</p>
+          <article class="share">
+            <h3>1층 세입자</h3>
+            <output id="tenant-amount" class="amount"></output>
+            <dl><div class="stat"><dt>사용량</dt><dd id="tenant-usage"></dd></div><div class="stat"><dt>사용 비율</dt><dd id="tenant-percent"></dd></div></dl>
+          </article>
+          <article class="share owner">
+            <h3>집주인</h3>
+            <output id="owner-amount" class="amount"></output>
+            <dl><div class="stat"><dt>사용량</dt><dd id="owner-usage"></dd></div><div class="stat"><dt>사용 비율</dt><dd id="owner-percent"></dd></div></dl>
+          </article>
+          <div class="total"><strong id="sum-total"></strong><p>두 금액의 합계가 실제 전기요금과 같아요.</p></div>
+          <button class="button primary" type="button" id="copy-button">정산 결과 복사</button>
+          <p class="small-note">복사한 뒤 카카오톡 대화창에 붙여넣으세요.</p>
+          <p id="copy-status" class="status" role="status" aria-live="polite"></p>
+          <div id="manual-copy" class="manual-copy" hidden><p>아래 문구를 길게 눌러 선택한 뒤 복사해 주세요.</p><pre id="copy-text" tabindex="0" aria-label="직접 복사할 정산 결과"></pre></div>
+          <div class="formula">
+            <h3>이렇게 계산했어요</h3>
+            <p class="formula-item"><strong>① 1층이 쓴 전기</strong><span id="formula-usage"></span></p>
+            <p class="formula-item"><strong>② 1층의 사용 비율</strong><span id="formula-ratio"></span></p>
+            <p class="formula-item"><strong>③ 1층이 낼 금액</strong><span id="formula-tenant"></span></p>
+            <p class="formula-item"><strong>④ 집주인이 쓴 전기</strong><span id="formula-owner-usage"></span></p>
+            <p class="formula-item"><strong>⑤ 집주인의 사용 비율</strong><span id="formula-owner-ratio"></span></p>
+            <p class="formula-item"><strong>⑥ 집주인이 낼 금액</strong><span id="formula-owner"></span></p>
+            <p class="small-note">1층 금액은 1원 단위로 반올림해요. 집주인 금액은 전체 요금에서 1층 금액을 빼요.</p>
+            <p class="small-note" id="ratio-note" hidden>사용 비율은 소수점 둘째 자리까지 표시해요. 금액은 반올림 전의 정확한 비율로 계산해요.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer><p>누진 구간과 관계없이, 고지서의 실제 요금을 사용량 비율로 나눠요.</p><p>입력한 숫자는 이 화면에서만 계산하며 저장하거나 외부로 보내지 않아요.</p></footer>
+    <p id="form-status" class="status" role="status" aria-live="polite"></p>
+  </main>
+  <script>
+    'use strict';
+    const SCALE = 1000000n;
+    const ids = ['total', 'previous', 'current', 'bill'];
+    const labels = { total: '집 전체 사용량', previous: '1층 지난번 검침값', current: '1층 이번 검침값', bill: '실제 전기요금' };
+    const byId = id => document.getElementById(id);
+    const form = byId('bill-form');
+    let result = null;
+
+    // All amounts and decimal meter values use integer arithmetic, including half-up rounding.
+    function parseValue(id) {
+      const raw = byId(id).value.trim();
+      if (!raw) throw { id, message: labels[id] + '을 입력해 주세요.' };
+      if (raw.startsWith('-')) throw { id, message: labels[id] + '에는 0 이상의 숫자를 입력해 주세요.' };
+      if (!/^(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(raw)) {
+        throw { id, message: labels[id] + '에는 숫자만 입력해 주세요. 쉼표는 1,000처럼 써 주세요.' };
+      }
+      const [whole, fraction = ''] = raw.replace(/,/g, '').split('.');
+      if (id === 'bill' && fraction) throw { id, message: '전기요금은 소수점 없이 원 단위로 입력해 주세요.' };
+      if (whole.length > 12) throw { id, message: '숫자가 너무 커요. 고지서나 계량기의 숫자를 다시 확인해 주세요.' };
+      if (fraction.length > 6) throw { id, message: '소수점 아래 숫자는 6자리까지 입력해 주세요.' };
+      return id === 'bill' ? BigInt(whole) : BigInt(whole) * SCALE + BigInt(fraction.padEnd(6, '0'));
+    }
+
+    function calculate(values) {
+      const { total, previous, current, bill } = values;
+      if (total === 0n) throw { id: 'total', message: '집 전체 사용량은 0보다 커야 해요. 한전 고지서의 사용량을 확인해 주세요.' };
+      if (current < previous) throw { id: 'current', message: '이번 검침값이 지난번보다 작아요. 숫자의 순서와 계량기를 확인해 주세요. 계량기를 교체했다면 이 방식으로 계산할 수 없어요.' };
+      const tenantUsage = current - previous;
+      if (tenantUsage > total) throw { id: 'current', message: '1층 사용량이 집 전체 사용량보다 많아요. 세 숫자와 검침기간이 같은지 확인해 주세요.' };
+      const ownerUsage = total - tenantUsage;
+      const tenantAmount = (2n * bill * tenantUsage + total) / (2n * total);
+      const ownerAmount = bill - tenantAmount;
+      const tenantPercent = (2n * tenantUsage * 10000n + total) / (2n * total);
+      return { ...values, tenantUsage, ownerUsage, tenantAmount, ownerAmount, tenantPercent, ownerPercent: 10000n - tenantPercent, approximate: tenantUsage * 10000n % total !== 0n };
+    }
+
+    const integerText = value => value.toLocaleString('ko-KR');
+    const won = value => integerText(value) + '원';
+    function usage(value) {
+      const decimals = (value % SCALE).toString().padStart(6, '0').replace(/0+$/, '');
+      return integerText(value / SCALE) + (decimals ? '.' + decimals : '');
+    }
+    function percent(value, approximate) {
+      const decimals = (value % 100n).toString().padStart(2, '0').replace(/0+$/, '');
+      return (approximate ? '약 ' : '') + (value / 100n) + (decimals ? '.' + decimals : '') + '%';
+    }
+    const put = (id, text) => { byId(id).textContent = text; };
+    function clearErrors() {
+      byId('error-summary').hidden = true;
+      for (const id of ids) { byId(id).removeAttribute('aria-invalid'); byId(id + '-error').hidden = true; put(id + '-error', ''); }
+    }
+    function invalidate(changed = false) {
+      result = null;
+      byId('result-content').hidden = true;
+      byId('empty-result').hidden = false;
+      byId('manual-copy').hidden = true;
+      put('copy-status', '');
+      put('copy-text', '');
+      put('empty-title', changed ? '숫자가 바뀌었어요.' : '얼마씩 내면 될까요?');
+      put('empty-description', changed ? '‘계산하기’를 다시 눌러 새 금액을 확인해 주세요.' : '숫자 4개를 넣고 ‘계산하기’를 누르면 각자 낼 금액이 나와요.');
+    }
+    function render(r) {
+      put('tenant-amount', won(r.tenantAmount)); put('owner-amount', won(r.ownerAmount));
+      put('tenant-usage', usage(r.tenantUsage) + ' kWh'); put('owner-usage', usage(r.ownerUsage) + ' kWh');
+      put('tenant-percent', percent(r.tenantPercent, r.approximate)); put('owner-percent', percent(r.ownerPercent, r.approximate));
+      put('sum-total', '합계 ' + won(r.bill));
+      put('formula-usage', usage(r.current) + ' − ' + usage(r.previous) + ' = ' + usage(r.tenantUsage) + ' kWh');
+      put('formula-ratio', usage(r.tenantUsage) + ' ÷ ' + usage(r.total) + ' × 100 = ' + percent(r.tenantPercent, r.approximate));
+      put('formula-tenant', won(r.bill) + ' × (' + usage(r.tenantUsage) + ' ÷ ' + usage(r.total) + ') = ' + won(r.tenantAmount) + ' (반올림)');
+      put('formula-owner-usage', usage(r.total) + ' − ' + usage(r.tenantUsage) + ' = ' + usage(r.ownerUsage) + ' kWh');
+      put('formula-owner-ratio', usage(r.ownerUsage) + ' ÷ ' + usage(r.total) + ' × 100 = ' + percent(r.ownerPercent, r.approximate));
+      put('formula-owner', won(r.bill) + ' − ' + won(r.tenantAmount) + ' = ' + won(r.ownerAmount));
+      byId('ratio-note').hidden = !r.approximate;
+      byId('empty-result').hidden = true; byId('result-content').hidden = false;
+    }
+
+    form.addEventListener('submit', event => {
+      event.preventDefault(); clearErrors(); invalidate(); put('form-status', '');
+      try {
+        result = calculate(Object.fromEntries(ids.map(id => [id, parseValue(id)])));
+        render(result);
+        byId('result-title').focus({ preventScroll: true });
+        byId('result-panel').scrollIntoView({ block: 'start', behavior: 'auto' });
+      } catch (error) {
+        const id = ids.includes(error.id) ? error.id : 'total';
+        const message = error.message || '숫자를 다시 확인한 뒤 계산해 주세요.';
+        put(id + '-error', message); byId(id + '-error').hidden = false;
+        byId(id).setAttribute('aria-invalid', 'true');
+        put('error-text', message); byId('error-summary').hidden = false;
+        byId(id).focus();
+      }
+    });
+    form.addEventListener('input', () => {
+      const changed = result !== null || byId('empty-title').textContent === '숫자가 바뀌었어요.';
+      invalidate(changed); clearErrors(); put('form-status', changed ? '숫자가 바뀌었어요. 계산하기를 다시 눌러 주세요.' : '');
+    });
+    form.addEventListener('reset', () => {
+      invalidate(); clearErrors(); put('form-status', '입력한 숫자를 모두 지웠어요. 새로 입력해 주세요.');
+      byId('total').focus();
+    });
+
+    function settlementText(r) {
+      return [
+        '[1층 전기요금 정산]',
+        '같은 검침기간의 사용량을 기준으로 나눴습니다.',
+        '',
+        '집 전체 사용량: ' + usage(r.total) + ' kWh',
+        '실제 전기요금: ' + won(r.bill) + ' (TV 수신료·연체료 등 제외)',
+        '1층 검침값: ' + usage(r.previous) + ' → ' + usage(r.current) + ' kWh',
+        '',
+        '■ 1층 세입자',
+        '사용량: ' + usage(r.tenantUsage) + ' kWh / 비율: ' + percent(r.tenantPercent, r.approximate),
+        '낼 금액: ' + won(r.tenantAmount),
+        '',
+        '■ 집주인',
+        '사용량: ' + usage(r.ownerUsage) + ' kWh / 비율: ' + percent(r.ownerPercent, r.approximate),
+        '낼 금액: ' + won(r.ownerAmount),
+        '',
+        '합계: ' + won(r.tenantAmount) + ' + ' + won(r.ownerAmount) + ' = ' + won(r.bill),
+        '1층 금액 = ' + won(r.bill) + ' × (' + usage(r.tenantUsage) + ' ÷ ' + usage(r.total) + '), 원 단위 반올림',
+        '집주인 금액 = 전체 전기요금 − 1층 금액',
+        '누진 구간과 관계없이 실제 요금을 사용량 비율대로 나눴습니다.',
+        ...(r.approximate ? ['표시 비율은 소수점 둘째 자리까지이며, 금액은 반올림 전 비율로 계산했습니다.'] : [])
+      ].join('\n');
+    }
+
+    // file:// and browsers without the Clipboard API can use the local fallback.
+    function legacyCopy(text) {
+      const field = document.createElement('textarea');
+      field.value = text; field.readOnly = true;
+      field.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none';
+      document.body.append(field); field.select(); field.setSelectionRange(0, text.length);
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (_) { /* Manual selection remains available. */ }
+      field.remove(); byId('copy-button').focus({ preventScroll: true });
+      return copied;
+    }
+    byId('copy-button').addEventListener('click', async () => {
+      if (!result) return;
+      const currentResult = result;
+      const text = settlementText(currentResult);
+      let copied = false;
+      put('copy-status', '');
+      try {
+        if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(text); copied = true; }
+        else copied = legacyCopy(text);
+      } catch (_) { copied = legacyCopy(text); }
+      if (result !== currentResult) return;
+      byId('manual-copy').hidden = copied;
+      if (copied) put('copy-status', '복사했어요. 카카오톡 대화창에 붙여넣으세요.');
+      else { put('copy-text', text); put('copy-status', '자동 복사가 안 돼요. 아래 문구를 직접 복사해 주세요.'); }
+    });
+  </script>
+</body>
+</html>
