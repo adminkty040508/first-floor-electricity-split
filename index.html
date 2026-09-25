@@ -101,6 +101,12 @@
     details p { margin: 4px 0 0; }
     .preparation { margin: 0; padding-left: 25px; }
     .preparation li { padding-left: 3px; margin-bottom: 12px; font-size: 22px; }
+    .bill-guide h2 { margin: 8px 0 16px; }
+    .guide-box { border: 1px solid #bdcee7; border-radius: 12px; background: #f1f6ff; padding: 12px; margin-bottom: 12px; }
+    .guide-box p { margin: 0; line-height: 1.45; }
+    .guide-box .guide-note { margin-top: 8px; font-size: 18px; }
+    .guide-exclude { background: #fff7e5; border-color: #c48413; color: #603b00; }
+    .bill-guide details { font-size: 18px; }
     .is-entering header p, .is-entering footer { display: none; }
     .is-entering .shell { padding-top: 12px; padding-bottom: 12px; }
     .is-entering header { margin-bottom: 12px; }
@@ -136,11 +142,19 @@
       .step-label { font-size: 23px; }
       .source { font-size: 17px; }
     }
+    @media (max-height: 700px) {
+      .is-starting .mark, .is-starting header p, .is-starting footer { display: none; }
+      .is-starting header { margin-bottom: 12px; }
+      .is-starting .panel { padding: 16px; }
+      .is-starting h2 { margin-bottom: 12px; }
+      .is-starting .preparation li { font-size: 20px; margin-bottom: 8px; }
+      .is-starting .period { margin: 12px 0; padding: 12px; }
+    }
     @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
     @media print { body { background: white; } header, .period, form, footer, #copy-button, .status, .manual-copy { display: none !important; } .layout { display: block; } .panel { border: none; } }
   </style>
 </head>
-<body>
+<body class="is-starting">
   <main class="shell">
     <header>
       <div class="brand"><span class="mark" aria-hidden="true"><svg width="27" height="30" viewBox="0 0 24 28" fill="currentColor"><path d="M14 1 3 16h8l-2 11 12-16h-8z"/></svg></span><h1>1층 전기요금 나누기</h1></div>
@@ -152,9 +166,9 @@
     <div class="layout">
       <section class="panel" id="start-panel" aria-labelledby="start-title">
         <h2 id="start-title" tabindex="-1">먼저 준비해 주세요</h2>
-        <ul class="preparation"><li>이번 달 <strong>한전 고지서</strong></li><li><strong>지난달</strong> 적어 둔 1층 계량기 숫자</li><li><strong>이번 달</strong> 확인한 1층 계량기 숫자</li></ul>
-        <aside class="period" aria-label="입력 전 꼭 확인하세요"><strong>꼭! 고지서와 같은 기간이어야 해요.</strong><p>지난달~이번 달 계량기를 확인한 날짜가 고지서의 사용기간과 같아야 해요.</p></aside>
-        <button id="start-button" class="button primary" type="button">준비됐어요 · 시작하기</button>
+        <ul class="preparation"><li>이번 달 <strong>한전 고지서</strong></li><li><strong>지난달·이번 달</strong><br>1층 계량기 숫자</li></ul>
+        <aside class="period" aria-label="입력 전 꼭 확인하세요"><strong>꼭! 같은 기간을 넣으세요.</strong><p>고지서의 <strong style="display:inline;font-size:inherit">‘사용기간’ 시작·끝 날짜</strong>와 두 번의 계량기 확인 날짜를 맞춰 주세요.</p></aside>
+        <button id="start-button" class="button primary" type="button">시작하기</button>
         <details><summary>지난달 숫자를 모르겠어요</summary><p>지난달에 찍어 둔 계량기 사진이나 적어 둔 기록을 찾아보세요. 그 숫자가 있어야 이번 달에 쓴 양을 알 수 있어요.</p></details>
       </section>
       <form id="bill-form" class="panel" novalidate autocomplete="off" hidden>
@@ -183,7 +197,7 @@
         <div class="field" id="step-bill" hidden>
           <p class="source">이번 달 한전 고지서</p>
           <label for="bill" class="step-label" id="title-bill" tabindex="-1">이번 달 전기요금</label>
-          <p class="hint bill-hint" id="bill-hint"><strong>TV 수신료·연체료 등은 빼세요.</strong></p>
+          <p class="hint bill-hint" id="bill-hint"><strong>기본요금·세금 포함</strong><br>TV 수신료 등은 빼세요.</p>
           <div class="input-wrap"><input id="bill" type="text" inputmode="none" maxlength="24" required spellcheck="false" aria-describedby="bill-hint keypad-help bill-error"><span class="unit" aria-hidden="true">원</span></div>
           <p class="field-error" id="bill-error" role="alert" hidden></p>
         </div>
@@ -196,6 +210,15 @@
         </div>
         <div class="step-actions"><button class="button primary" type="submit" id="next-button">다음</button></div>
       </form>
+
+      <section class="panel bill-guide" id="bill-guide" aria-labelledby="bill-guide-title" hidden>
+        <div class="step-top"><p class="step-progress">금액 입력 전 확인</p><button id="guide-back" class="back" type="button">이전으로</button></div>
+        <h2 id="bill-guide-title" tabindex="-1">낼 전기요금을 확인해요</h2>
+        <div class="guide-box"><p><strong>기본요금·세금·전력기금도 모두 포함해요.</strong></p><p class="guide-note">할인이 있다면 <strong>할인 후 금액</strong>이에요.</p></div>
+        <div class="guide-box guide-exclude"><p><strong>TV 수신료·연체료·지난 미납금은 빼세요.</strong></p></div>
+        <button class="button primary" id="guide-next" type="button">확인했어요 · 다음</button>
+        <details><summary>고지서의 어느 금액인가요?</summary><p>이번 사용기간의 <strong>전기요금에 부가세와 전력산업기반기금까지 더해진 금액</strong>을 넣으세요. 고지서의 ‘전기요금계’는 세금과 기금이 붙기 전일 수 있어요.</p><p>전기요금에는 기본요금·전력량요금·기후환경요금·연료비조정요금과 고지서에 적용된 할인이 반영돼요. 고지서에 이미 들어간 금액을 다시 더하지 마세요.</p><p>청구금액에 TV 수신료, 연체료, 지난 미납금이나 다른 기간의 정산액이 섞여 있으면 제외해 주세요. 이 화면에서 자동으로 빼지는 않아요.</p></details>
+      </section>
 
       <section class="panel result-panel" id="result-panel" aria-labelledby="result-title" hidden>
         <h2 id="result-title" tabindex="-1">정산 결과</h2>
@@ -226,12 +249,15 @@
             <p class="formula-item"><strong>⑤ 집주인의 사용 비율</strong><span id="formula-owner-ratio"></span></p>
             <p class="formula-item"><strong>⑥ 집주인이 낼 금액</strong><span id="formula-owner"></span></p>
             <p class="small-note">1층 금액은 1원 단위로 반올림해요. 집주인 금액은 전체 요금에서 1층 금액을 빼요.</p>
+            <p class="small-note">기본요금·세금·전력기금도 입력한 금액에 포함해 같은 사용량 비율로 나눠요. 고지서에 적용된 할인도 함께 반영돼요.</p>
+            <p class="small-note">집주인 사용량은 집 전체에서 1층 사용량을 뺀 양이에요. 공용 전기 중 1층 계량기에 잡히지 않은 양도 집주인 몫에 들어가요.</p>
+            <p class="small-note">이 계산은 두 분이 정한 ‘사용량 비례 정산’이에요. 한전에서 두 가구에 따로 요금을 매기는 계산은 아니에요.</p>
             <p class="small-note" id="ratio-note" hidden>사용 비율은 소수점 둘째 자리까지 표시해요. 금액은 반올림 전의 정확한 비율로 계산해요.</p>
           </details>
         </div>
       </section>
     </div>
-    <footer><p>누진 구간과 관계없이, 고지서의 실제 요금을 사용량 비율로 나눠요.</p><p>입력한 숫자는 이 화면에서만 계산하며 저장하거나 외부로 보내지 않아요.</p></footer>
+    <footer><p>고지서의 실제 요금을 두 분이 정한 사용량 비율로 나눠요. 한전 요율을 따로 계산하지 않아요.</p><p>입력한 숫자는 이 화면에서만 계산하며 저장하거나 외부로 보내지 않아요.</p></footer>
     <p id="form-status" class="status" role="status" aria-live="polite"></p>
   </main>
   <script>
@@ -307,13 +333,24 @@
       put('formula-owner', won(r.bill) + ' − ' + won(r.tenantAmount) + ' = ' + won(r.ownerAmount));
       byId('ratio-note').hidden = !r.approximate;
       document.body.classList.remove('is-entering');
+      byId('bill-guide').hidden = true;
       form.hidden = true; byId('result-panel').hidden = false; byId('result-content').hidden = false;
+    }
+
+    function showBillGuide() {
+      document.body.classList.add('is-entering');
+      form.hidden = true;
+      byId('bill-guide').hidden = false;
+      byId('bill-guide-title').focus({ preventScroll: true });
+      byId('bill-guide').scrollIntoView({ block: 'start', behavior: 'auto' });
     }
 
     function showStep(index, moveFocus = true) {
       step = index;
+      document.body.classList.remove('is-starting');
       document.body.classList.add('is-entering');
       byId('start-panel').hidden = true;
+      byId('bill-guide').hidden = true;
       form.hidden = false;
       for (const [i, id] of ids.entries()) byId('step-' + id).hidden = i !== step;
       put('step-progress', ['첫 번째', '두 번째', '세 번째', '마지막'][step] + ' / 네 단계');
@@ -338,7 +375,10 @@
       try {
         parseValue(ids[step]);
         if (step === 0 && parseValue('total') === 0n) throw { id: 'total', message: '집 전체 사용량은 0보다 커야 해요. 고지서의 사용량을 다시 확인해 주세요.' };
-        if (step === 2) calculate({ total: parseValue('total'), previous: parseValue('previous'), current: parseValue('current'), bill: 0n });
+        if (step === 2) {
+          calculate({ total: parseValue('total'), previous: parseValue('previous'), current: parseValue('current'), bill: 0n });
+          showBillGuide(); return;
+        }
         if (step < 3) { showStep(step + 1); return; }
         result = calculate(Object.fromEntries(ids.map(id => [id, parseValue(id)])));
         render(result);
@@ -356,12 +396,16 @@
       showStep(0);
     });
     byId('start-button').addEventListener('click', () => { clearErrors(); showStep(0); });
+    byId('guide-next').addEventListener('click', () => showStep(3));
+    byId('guide-back').addEventListener('click', () => showStep(2));
     byId('back-button').addEventListener('click', () => {
       clearErrors();
-      if (step > 0) showStep(step - 1);
+      if (step === 3) showBillGuide();
+      else if (step > 0) showStep(step - 1);
       else {
         form.hidden = true; byId('start-panel').hidden = false;
         document.body.classList.remove('is-entering');
+        document.body.classList.add('is-starting');
         byId('start-title').focus({ preventScroll: true });
         window.scrollTo(0, 0);
       }
@@ -395,7 +439,9 @@
         '같은 검침기간의 사용량을 기준으로 나눴습니다.',
         '',
         '집 전체 사용량: ' + usage(r.total) + ' kWh',
-        '실제 전기요금: ' + won(r.bill) + ' (TV 수신료·연체료 등 제외)',
+        '정산에 입력한 실제 전기요금: ' + won(r.bill),
+        '(기본요금·부가세·전력기금 포함, 고지서 할인 반영)',
+        '(TV 수신료·연체료·지난 미납금 등 제외한 금액 기준)',
         '1층 계량기: 지난달 ' + usage(r.previous) + ' → 이번 달 ' + usage(r.current) + ' kWh',
         '',
         '■ 1층 세입자',
