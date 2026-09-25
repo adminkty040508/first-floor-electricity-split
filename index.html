@@ -17,7 +17,7 @@
     button { cursor: pointer; touch-action: manipulation; }
     button, input, [tabindex] { -webkit-tap-highlight-color: transparent; }
     :focus-visible { outline: 4px solid #c76300; outline-offset: 4px; }
-    .shell { width: min(1080px, 100%); margin: 0 auto; padding: 32px 24px 40px; }
+    .shell { width: min(620px, 100%); margin: 0 auto; padding: 24px 20px 32px; }
     header { margin-bottom: 24px; }
     .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
     .mark { flex: 0 0 auto; display: grid; place-items: center; width: 44px; height: 44px; background: var(--blue); color: white; border-radius: 12px; }
@@ -26,14 +26,14 @@
     .period { padding: 18px 22px; background: #fff4d9; border: 2px solid #c48413; border-radius: 14px; margin-bottom: 24px; color: #603b00; }
     .period strong { display: block; font-size: 22px; }
     .period p { margin: 4px 0 0; }
-    .layout { display: grid; grid-template-columns: 1.12fr 1fr; gap: 24px; align-items: start; }
+    .layout { display: block; }
     .panel { background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: 28px; }
     h2 { font-size: 25px; line-height: 1.4; margin: 0 0 24px; letter-spacing: -.5px; }
-    .field { margin-bottom: 26px; }
+    .field { margin-bottom: 16px; }
     label { display: flex; align-items: flex-start; gap: 10px; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
     .number { background: #e8effa; color: var(--blue); border-radius: 50%; min-width: 30px; height: 30px; text-align: center; font-size: 18px; line-height: 30px; margin-top: 3px; }
-    .hint { margin: 0 0 10px; color: var(--muted); font-size: 18px; }
-    .bill-hint { color: #774400; background: #fff7e5; border-left: 4px solid #c48413; padding: 9px 12px; }
+    .hint { margin: 0 0 12px; color: var(--ink); font-size: 21px; }
+    .bill-hint { color: #774400; background: #fff7e5; border-left: 4px solid #c48413; padding: 6px 10px; }
     .input-wrap { position: relative; }
     input { display: block; width: 100%; min-height: 68px; padding: 12px 75px 12px 16px; border: 2px solid #93a7c0; border-radius: 10px; font-size: 28px; line-height: 1.35; background: white; color: var(--ink); font-variant-numeric: tabular-nums; }
     input::placeholder { color: #62748b; opacity: 1; font-size: 23px; }
@@ -81,16 +81,50 @@
     footer { font-size: 18px; color: var(--muted); margin-top: 24px; }
     footer p { margin: 5px 0; }
     noscript p { padding: 20px; color: var(--error); background: #fff0f0; }
+    .step-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .step-progress { color: var(--blue); font-size: 18px; font-weight: 700; margin: 0; }
+    .back { flex-shrink: 0; white-space: nowrap; min-height: 44px; background: white; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; color: var(--ink); font-size: 19px; }
+    .source { margin: 0 0 6px; color: var(--blue); font-size: 18px; font-weight: 700; }
+    .step-label { display: block; font-size: 25px; line-height: 1.35; margin-bottom: 8px; }
+    .keypad-help { margin: 10px 0 8px; font-size: 20px; font-weight: 700; }
+    .keypad { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 10px; }
+    .key { min-height: 56px; line-height: 1.15; padding: 2px 4px; border: 2px solid #a9b9ce; border-radius: 10px; background: #f5f8fd; color: var(--ink); font-size: 30px; font-weight: 700; touch-action: manipulation; }
+    .key:hover, .key:active { background: #dce9fb; border-color: var(--blue); }
+    .key.word { font-size: 19px; }
+    .key:disabled { color: #708096; background: #f3f3f3; border-color: #d9dfe8; cursor: default; }
+    .step-actions { background: white; padding: 8px 0; }
+    .period { font-size: 18px; margin-top: 20px; margin-bottom: 16px; }
+    .period strong { font-size: 20px; }
+    .result-actions { display: grid; gap: 12px; margin-top: 22px; }
+    details { margin-top: 14px; }
+    summary { cursor: pointer; min-height: 48px; padding: 8px 0; font-weight: 700; }
+    details p { margin: 4px 0 0; }
+    .preparation { margin: 0; padding-left: 25px; }
+    .preparation li { padding-left: 3px; margin-bottom: 12px; font-size: 22px; }
+    .is-entering header p, .is-entering footer { display: none; }
+    .is-entering .shell { padding-top: 12px; padding-bottom: 12px; }
+    .is-entering header { margin-bottom: 12px; }
+    .is-entering .panel { padding: 16px; }
+    .is-entering .field { margin-bottom: 8px; }
+    .is-entering .hint { margin-bottom: 8px; font-size: 20px; line-height: 1.45; }
+    .is-entering input { min-height: 62px; padding-top: 10px; padding-bottom: 10px; }
+    .is-entering .button { min-height: 60px; padding: 10px 16px; }
+    .is-entering .step-actions { padding: 6px 0 0; }
+    @media (max-height: 780px) { .is-entering header { display: none; } }
+    @media (max-height: 700px) { .is-entering .panel { padding: 12px; } .key { min-height: 50px; } }
     @media (max-width: 760px) {
-      .shell { padding: 22px 16px 32px; }
+      .shell { padding: 18px 12px 28px; }
       .layout { grid-template-columns: 1fr; gap: 20px; }
-      .panel { padding: 22px 20px; border-radius: 16px; }
+      .panel { padding: 20px 16px; border-radius: 16px; }
       .period { padding: 16px; margin-bottom: 20px; }
       .result-panel { scroll-margin-top: 18px; }
       .empty { padding: 0 0 8px; }
       .empty-icon { display: none; }
       .share { padding: 18px; }
       h2 { margin-bottom: 22px; }
+      header { margin-bottom: 16px; }
+      header p { font-size: 19px; }
+      .step-label { font-size: 25px; }
     }
     @media (max-width: 360px) {
       .shell { padding-left: 12px; padding-right: 12px; }
@@ -99,6 +133,8 @@
       .mark { width: 34px; height: 38px; }
       h1 { font-size: 27px; }
       .amount { font-size: 32px; }
+      .step-label { font-size: 23px; }
+      .source { font-size: 17px; }
     }
     @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
     @media print { body { background: white; } header, .period, form, footer, #copy-button, .status, .manual-copy { display: none !important; } .layout { display: block; } .panel { border: none; } }
@@ -108,57 +144,61 @@
   <main class="shell">
     <header>
       <div class="brand"><span class="mark" aria-hidden="true"><svg width="27" height="30" viewBox="0 0 24 28" fill="currentColor"><path d="M14 1 3 16h8l-2 11 12-16h-8z"/></svg></span><h1>1층 전기요금 나누기</h1></div>
-      <p>실제로 나온 요금을 쓴 만큼 나눠요.</p>
+      <p>하나씩 안내해 드릴게요.</p>
     </header>
-
-    <aside class="period" aria-label="입력 전 꼭 확인하세요">
-      <strong>꼭! 같은 검침기간을 맞춰 주세요.</strong>
-      <p>한전 고지서의 사용기간과 1층의 지난번~이번 검침기간이 같아야 해요.</p>
-    </aside>
 
     <noscript><p>계산하려면 브라우저의 자바스크립트를 켜 주세요.</p></noscript>
 
     <div class="layout">
-      <form id="bill-form" class="panel" novalidate autocomplete="off">
-        <h2>숫자 4개를 입력해 주세요</h2>
-        <div class="field">
-          <label for="total"><span class="number" aria-hidden="true">1</span>집 전체 사용량</label>
-          <p class="hint" id="total-hint">한전 고지서에 적힌 사용량이에요. (kWh)</p>
-          <div class="input-wrap"><input id="total" type="text" inputmode="decimal" placeholder="예: 600" maxlength="24" required spellcheck="false" aria-describedby="total-hint total-error"><span class="unit" aria-hidden="true">kWh</span></div>
-          <p class="field-error" id="total-error" hidden></p>
+      <section class="panel" id="start-panel" aria-labelledby="start-title">
+        <h2 id="start-title" tabindex="-1">먼저 준비해 주세요</h2>
+        <ul class="preparation"><li>이번 달 <strong>한전 고지서</strong></li><li><strong>지난달</strong> 적어 둔 1층 계량기 숫자</li><li><strong>이번 달</strong> 확인한 1층 계량기 숫자</li></ul>
+        <aside class="period" aria-label="입력 전 꼭 확인하세요"><strong>꼭! 고지서와 같은 기간이어야 해요.</strong><p>지난달~이번 달 계량기를 확인한 날짜가 고지서의 사용기간과 같아야 해요.</p></aside>
+        <button id="start-button" class="button primary" type="button">준비됐어요 · 시작하기</button>
+        <details><summary>지난달 숫자를 모르겠어요</summary><p>지난달에 찍어 둔 계량기 사진이나 적어 둔 기록을 찾아보세요. 그 숫자가 있어야 이번 달에 쓴 양을 알 수 있어요.</p></details>
+      </section>
+      <form id="bill-form" class="panel" novalidate autocomplete="off" hidden>
+        <div class="step-top"><p id="step-progress" class="step-progress">첫 번째 / 네 단계</p><button id="back-button" class="back" type="button">이전으로</button></div>
+        <div class="field" id="step-total">
+          <p class="source">이번 달 한전 고지서</p>
+          <label for="total" class="step-label" id="title-total" tabindex="-1">집 전체 사용량</label>
+          <p class="hint" id="total-hint">고지서의 <strong>‘사용량’ 옆 숫자</strong>를 넣으세요. 단위는 kWh예요.</p>
+          <div class="input-wrap"><input id="total" type="text" inputmode="none" maxlength="24" required spellcheck="false" aria-describedby="total-hint keypad-help total-error"><span class="unit" aria-hidden="true">kWh</span></div>
+          <p class="field-error" id="total-error" role="alert" hidden></p>
         </div>
-        <div class="field">
-          <label for="previous"><span class="number" aria-hidden="true">2</span>1층 지난번 검침값</label>
-          <p class="hint" id="previous-hint">지난번 보조계량기에 적힌 숫자예요. (kWh)</p>
-          <div class="input-wrap"><input id="previous" type="text" inputmode="decimal" placeholder="예: 1000" maxlength="24" required spellcheck="false" aria-describedby="previous-hint previous-error"><span class="unit" aria-hidden="true">kWh</span></div>
-          <p class="field-error" id="previous-error" hidden></p>
+        <div class="field" id="step-previous" hidden>
+          <p class="source">지난달 적어 둔 기록</p>
+          <label for="previous" class="step-label" id="title-previous" tabindex="-1">지난달 1층 계량기 숫자</label>
+          <p class="hint" id="previous-hint"><strong>지난달</strong>에 1층 계량기를 보고 적어 둔 숫자를 넣으세요.</p>
+          <div class="input-wrap"><input id="previous" type="text" inputmode="none" maxlength="24" required spellcheck="false" aria-describedby="previous-hint keypad-help previous-error"><span class="unit" aria-hidden="true">kWh</span></div>
+          <p class="field-error" id="previous-error" role="alert" hidden></p>
         </div>
-        <div class="field">
-          <label for="current"><span class="number" aria-hidden="true">3</span>1층 이번 검침값</label>
-          <p class="hint" id="current-hint">이번 보조계량기에 적힌 숫자예요. (kWh)</p>
-          <div class="input-wrap"><input id="current" type="text" inputmode="decimal" placeholder="예: 1450" maxlength="24" required spellcheck="false" aria-describedby="current-hint current-error"><span class="unit" aria-hidden="true">kWh</span></div>
-          <p class="field-error" id="current-error" hidden></p>
+        <div class="field" id="step-current" hidden>
+          <p class="source">이번 달 계량기를 보세요</p>
+          <label for="current" class="step-label" id="title-current" tabindex="-1">이번 달 1층 계량기 숫자</label>
+          <p class="hint" id="current-hint"><strong>이번 달</strong>에 1층 계량기에서<br>읽은 숫자를 넣으세요.</p>
+          <div class="input-wrap"><input id="current" type="text" inputmode="none" maxlength="24" required spellcheck="false" aria-describedby="current-hint keypad-help current-error"><span class="unit" aria-hidden="true">kWh</span></div>
+          <p class="field-error" id="current-error" role="alert" hidden></p>
         </div>
-        <div class="field">
-          <label for="bill"><span class="number" aria-hidden="true">4</span>실제 전기요금</label>
-          <p class="hint bill-hint" id="bill-hint">한전 고지서에서 <strong>TV 수신료와 연체료 등은 빼고</strong>, 전기요금만 입력해 주세요. (원)</p>
-          <div class="input-wrap"><input id="bill" type="text" inputmode="numeric" placeholder="예: 120000" maxlength="24" required spellcheck="false" aria-describedby="bill-hint bill-error"><span class="unit" aria-hidden="true">원</span></div>
-          <p class="field-error" id="bill-error" hidden></p>
+        <div class="field" id="step-bill" hidden>
+          <p class="source">이번 달 한전 고지서</p>
+          <label for="bill" class="step-label" id="title-bill" tabindex="-1">이번 달 전기요금</label>
+          <p class="hint bill-hint" id="bill-hint"><strong>TV 수신료·연체료 등은 빼세요.</strong></p>
+          <div class="input-wrap"><input id="bill" type="text" inputmode="none" maxlength="24" required spellcheck="false" aria-describedby="bill-hint keypad-help bill-error"><span class="unit" aria-hidden="true">원</span></div>
+          <p class="field-error" id="bill-error" role="alert" hidden></p>
         </div>
-        <div id="error-summary" class="error-summary" role="alert" hidden><strong>숫자를 다시 확인해 주세요.</strong><p id="error-text"></p></div>
-        <div class="actions">
-          <button class="button primary" type="submit">계산하기</button>
-          <button class="button secondary" type="reset">다시 입력</button>
+        <p class="keypad-help" id="keypad-help">아래 숫자판을 누르세요.</p>
+        <div class="keypad" role="group" aria-label="큰 숫자판">
+          <button class="key" type="button" data-key="1">1</button><button class="key" type="button" data-key="2">2</button><button class="key" type="button" data-key="3">3</button>
+          <button class="key" type="button" data-key="4">4</button><button class="key" type="button" data-key="5">5</button><button class="key" type="button" data-key="6">6</button>
+          <button class="key" type="button" data-key="7">7</button><button class="key" type="button" data-key="8">8</button><button class="key" type="button" data-key="9">9</button>
+          <button class="key word" type="button" data-key="." id="decimal-key" aria-label="소수점">소수점</button><button class="key" type="button" data-key="0">0</button><button class="key word" type="button" data-key="delete" aria-label="한 글자 지우기">지우기</button>
         </div>
+        <div class="step-actions"><button class="button primary" type="submit" id="next-button">다음</button></div>
       </form>
 
-      <section class="panel result-panel" id="result-panel" aria-labelledby="result-title">
+      <section class="panel result-panel" id="result-panel" aria-labelledby="result-title" hidden>
         <h2 id="result-title" tabindex="-1">정산 결과</h2>
-        <div id="empty-result" class="empty">
-          <span class="empty-icon" aria-hidden="true"><svg width="30" height="32" viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="1" width="18" height="24" rx="3"/><path d="M7 6h10M7 12h3m4 0h3M7 17h3m4 0h3M7 21h3m4 0h3"/></svg></span>
-          <strong id="empty-title">얼마씩 내면 될까요?</strong>
-          <p id="empty-description">숫자 4개를 넣고 ‘계산하기’를 누르면 각자 낼 금액이 나와요.</p>
-        </div>
         <div id="result-content" hidden>
           <p class="result-topline">이번 전기요금은 이렇게 나눠요.</p>
           <article class="share">
@@ -176,8 +216,9 @@
           <p class="small-note">복사한 뒤 카카오톡 대화창에 붙여넣으세요.</p>
           <p id="copy-status" class="status" role="status" aria-live="polite"></p>
           <div id="manual-copy" class="manual-copy" hidden><p>아래 문구를 길게 눌러 선택한 뒤 복사해 주세요.</p><pre id="copy-text" tabindex="0" aria-label="직접 복사할 정산 결과"></pre></div>
-          <div class="formula">
-            <h3>이렇게 계산했어요</h3>
+          <div class="result-actions"><button type="button" id="edit-button" class="button secondary">입력한 숫자 고치기</button><button type="reset" form="bill-form" class="button secondary">다시 입력</button></div>
+          <details class="formula">
+            <summary>계산 방법 보기</summary>
             <p class="formula-item"><strong>① 1층이 쓴 전기</strong><span id="formula-usage"></span></p>
             <p class="formula-item"><strong>② 1층의 사용 비율</strong><span id="formula-ratio"></span></p>
             <p class="formula-item"><strong>③ 1층이 낼 금액</strong><span id="formula-tenant"></span></p>
@@ -186,7 +227,7 @@
             <p class="formula-item"><strong>⑥ 집주인이 낼 금액</strong><span id="formula-owner"></span></p>
             <p class="small-note">1층 금액은 1원 단위로 반올림해요. 집주인 금액은 전체 요금에서 1층 금액을 빼요.</p>
             <p class="small-note" id="ratio-note" hidden>사용 비율은 소수점 둘째 자리까지 표시해요. 금액은 반올림 전의 정확한 비율로 계산해요.</p>
-          </div>
+          </details>
         </div>
       </section>
     </div>
@@ -197,15 +238,16 @@
     'use strict';
     const SCALE = 1000000n;
     const ids = ['total', 'previous', 'current', 'bill'];
-    const labels = { total: '집 전체 사용량', previous: '1층 지난번 검침값', current: '1층 이번 검침값', bill: '실제 전기요금' };
+    const labels = { total: '집 전체 사용량', previous: '지난달 1층 계량기 숫자', current: '이번 달 1층 계량기 숫자', bill: '이번 달 전기요금' };
     const byId = id => document.getElementById(id);
     const form = byId('bill-form');
     let result = null;
+    let step = 0;
 
     // All amounts and decimal meter values use integer arithmetic, including half-up rounding.
     function parseValue(id) {
       const raw = byId(id).value.trim();
-      if (!raw) throw { id, message: labels[id] + '을 입력해 주세요.' };
+      if (!raw) throw { id, message: '아직 숫자가 없어요. 아래 숫자판을 눌러 넣어 주세요.' };
       if (raw.startsWith('-')) throw { id, message: labels[id] + '에는 0 이상의 숫자를 입력해 주세요.' };
       if (!/^(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(raw)) {
         throw { id, message: labels[id] + '에는 숫자만 입력해 주세요. 쉼표는 1,000처럼 써 주세요.' };
@@ -220,9 +262,9 @@
     function calculate(values) {
       const { total, previous, current, bill } = values;
       if (total === 0n) throw { id: 'total', message: '집 전체 사용량은 0보다 커야 해요. 한전 고지서의 사용량을 확인해 주세요.' };
-      if (current < previous) throw { id: 'current', message: '이번 검침값이 지난번보다 작아요. 숫자의 순서와 계량기를 확인해 주세요. 계량기를 교체했다면 이 방식으로 계산할 수 없어요.' };
+      if (current < previous) throw { id: 'current', message: '이번 달 숫자가 지난달보다 작아요. 지난달과 이번 달 숫자를 바꿔 넣지 않았는지 확인해 주세요. 계량기를 교체했다면 이 방식으로 계산할 수 없어요.' };
       const tenantUsage = current - previous;
-      if (tenantUsage > total) throw { id: 'current', message: '1층 사용량이 집 전체 사용량보다 많아요. 세 숫자와 검침기간이 같은지 확인해 주세요.' };
+      if (tenantUsage > total) throw { id: 'current', message: '1층에서 쓴 양이 집 전체보다 많게 나와요. 고지서 사용량과 지난달·이번 달 숫자, 날짜를 확인해 주세요.' };
       const ownerUsage = total - tenantUsage;
       const tenantAmount = (2n * bill * tenantUsage + total) / (2n * total);
       const ownerAmount = bill - tenantAmount;
@@ -242,18 +284,15 @@
     }
     const put = (id, text) => { byId(id).textContent = text; };
     function clearErrors() {
-      byId('error-summary').hidden = true;
       for (const id of ids) { byId(id).removeAttribute('aria-invalid'); byId(id + '-error').hidden = true; put(id + '-error', ''); }
     }
-    function invalidate(changed = false) {
+    function invalidate() {
       result = null;
       byId('result-content').hidden = true;
-      byId('empty-result').hidden = false;
+      byId('result-panel').hidden = true;
       byId('manual-copy').hidden = true;
       put('copy-status', '');
       put('copy-text', '');
-      put('empty-title', changed ? '숫자가 바뀌었어요.' : '얼마씩 내면 될까요?');
-      put('empty-description', changed ? '‘계산하기’를 다시 눌러 새 금액을 확인해 주세요.' : '숫자 4개를 넣고 ‘계산하기’를 누르면 각자 낼 금액이 나와요.');
     }
     function render(r) {
       put('tenant-amount', won(r.tenantAmount)); put('owner-amount', won(r.ownerAmount));
@@ -267,33 +306,88 @@
       put('formula-owner-ratio', usage(r.ownerUsage) + ' ÷ ' + usage(r.total) + ' × 100 = ' + percent(r.ownerPercent, r.approximate));
       put('formula-owner', won(r.bill) + ' − ' + won(r.tenantAmount) + ' = ' + won(r.ownerAmount));
       byId('ratio-note').hidden = !r.approximate;
-      byId('empty-result').hidden = true; byId('result-content').hidden = false;
+      document.body.classList.remove('is-entering');
+      form.hidden = true; byId('result-panel').hidden = false; byId('result-content').hidden = false;
+    }
+
+    function showStep(index, moveFocus = true) {
+      step = index;
+      document.body.classList.add('is-entering');
+      byId('start-panel').hidden = true;
+      form.hidden = false;
+      for (const [i, id] of ids.entries()) byId('step-' + id).hidden = i !== step;
+      put('step-progress', ['첫 번째', '두 번째', '세 번째', '마지막'][step] + ' / 네 단계');
+      byId('decimal-key').disabled = ids[step] === 'bill';
+      put('next-button', step === 3 ? '계산하기' : '다음');
+      if (moveFocus) {
+        byId('title-' + ids[step]).focus({ preventScroll: true });
+        form.scrollIntoView({ block: 'start', behavior: 'auto' });
+      }
+    }
+    function showError(error) {
+      const id = ids.includes(error.id) ? error.id : ids[step];
+      showStep(ids.indexOf(id));
+      put(id + '-error', error.message || '숫자를 다시 확인해 주세요.');
+      byId(id + '-error').hidden = false;
+      byId(id).setAttribute('aria-invalid', 'true');
+      byId(id).focus({ preventScroll: true });
     }
 
     form.addEventListener('submit', event => {
       event.preventDefault(); clearErrors(); invalidate(); put('form-status', '');
       try {
+        parseValue(ids[step]);
+        if (step === 0 && parseValue('total') === 0n) throw { id: 'total', message: '집 전체 사용량은 0보다 커야 해요. 고지서의 사용량을 다시 확인해 주세요.' };
+        if (step === 2) calculate({ total: parseValue('total'), previous: parseValue('previous'), current: parseValue('current'), bill: 0n });
+        if (step < 3) { showStep(step + 1); return; }
         result = calculate(Object.fromEntries(ids.map(id => [id, parseValue(id)])));
         render(result);
         byId('result-title').focus({ preventScroll: true });
         byId('result-panel').scrollIntoView({ block: 'start', behavior: 'auto' });
       } catch (error) {
-        const id = ids.includes(error.id) ? error.id : 'total';
-        const message = error.message || '숫자를 다시 확인한 뒤 계산해 주세요.';
-        put(id + '-error', message); byId(id + '-error').hidden = false;
-        byId(id).setAttribute('aria-invalid', 'true');
-        put('error-text', message); byId('error-summary').hidden = false;
-        byId(id).focus();
+        showError(error);
       }
     });
     form.addEventListener('input', () => {
-      const changed = result !== null || byId('empty-title').textContent === '숫자가 바뀌었어요.';
-      invalidate(changed); clearErrors(); put('form-status', changed ? '숫자가 바뀌었어요. 계산하기를 다시 눌러 주세요.' : '');
+      invalidate(); clearErrors(); put('form-status', '');
     });
     form.addEventListener('reset', () => {
       invalidate(); clearErrors(); put('form-status', '입력한 숫자를 모두 지웠어요. 새로 입력해 주세요.');
-      byId('total').focus();
+      showStep(0);
     });
+    byId('start-button').addEventListener('click', () => { clearErrors(); showStep(0); });
+    byId('back-button').addEventListener('click', () => {
+      clearErrors();
+      if (step > 0) showStep(step - 1);
+      else {
+        form.hidden = true; byId('start-panel').hidden = false;
+        document.body.classList.remove('is-entering');
+        byId('start-title').focus({ preventScroll: true });
+        window.scrollTo(0, 0);
+      }
+    });
+    byId('edit-button').addEventListener('click', () => { invalidate(); clearErrors(); showStep(0); });
+    for (const key of document.querySelectorAll('[data-key]')) {
+      key.addEventListener('click', () => {
+        const field = byId(ids[step]);
+        const value = key.dataset.key;
+        const start = field.selectionStart ?? field.value.length;
+        const end = field.selectionEnd ?? start;
+        let text = field.value, cursor = start;
+        if (value === 'delete') {
+          const from = start === end ? Math.max(0, start - 1) : start;
+          text = text.slice(0, from) + text.slice(end); cursor = from;
+        } else {
+          if (value === '.' && (ids[step] === 'bill' || (text.slice(0, start) + text.slice(end)).includes('.'))) return;
+          const digit = value === '.' && start === 0 ? '0.' : value;
+          text = text.slice(0, start) + digit + text.slice(end); cursor = start + digit.length;
+        }
+        if (text.length > field.maxLength) return;
+        field.value = text;
+        field.setSelectionRange(cursor, cursor);
+        field.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    }
 
     function settlementText(r) {
       return [
@@ -302,7 +396,7 @@
         '',
         '집 전체 사용량: ' + usage(r.total) + ' kWh',
         '실제 전기요금: ' + won(r.bill) + ' (TV 수신료·연체료 등 제외)',
-        '1층 검침값: ' + usage(r.previous) + ' → ' + usage(r.current) + ' kWh',
+        '1층 계량기: 지난달 ' + usage(r.previous) + ' → 이번 달 ' + usage(r.current) + ' kWh',
         '',
         '■ 1층 세입자',
         '사용량: ' + usage(r.tenantUsage) + ' kWh / 비율: ' + percent(r.tenantPercent, r.approximate),
